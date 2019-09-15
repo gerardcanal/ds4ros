@@ -1,0 +1,4 @@
+# Values go from 0 to 255
+uint8 on_time
+uint8 off_time
+---

@@ -1,0 +1,4 @@
+# Only RGB is considered!
+# RGB values range 0-255
+std_msgs/ColorRGBA color
+---
