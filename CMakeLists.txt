@@ -59,6 +59,7 @@ add_service_files(
   Rumble.srv  
   SetColor.srv
   StartFlash.srv
+  IsConnected.srv
   BatteryStatus.srv
 )
 

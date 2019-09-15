@@ -18,6 +18,7 @@ from ds4drv.daemon import Daemon
 from threading import Thread
 from std_srvs.srv import Empty, EmptyResponse
 from ds4ros.srv import Rumble, SetColor, StartFlash, BatteryStatus, BatteryStatusResponse
+from ds4ros.srv import IsConnected, IsConnectedResponse
 from std_msgs.msg import Bool
 
 
@@ -108,12 +109,19 @@ class ROSDS4Controller:
         return ()
 
     def srv_connect(self, _):
-        self.connect()
+        if not self.is_connected():
+            self.connect()
         return ()
 
     def srv_disconnect(self, _):
-        self.disconnect()
+        if self.is_connected():
+            self.disconnect()
         return ()
+
+    def srv_is_connected(self, _):
+        res = IsConnectedResponse()
+        res.is_connected = self.is_connected()
+        return res
 
     def start_ros_services(self):
         self.connectsrv = rospy.Service('~connect', Empty, self.srv_connect)
@@ -124,6 +132,7 @@ class ROSDS4Controller:
         self.rumble = rospy.Service('~rumble', Rumble, self.rumble)
         self.stoprumble = rospy.Service('~stop_rumble', Empty, self.stop_rumble)
         self.battery = rospy.Service('~battery_status', BatteryStatus, self.get_battery)
+        self.isconnected = rospy.Service('~is_connected', IsConnected, self.srv_is_connected)
 
 
 def main():
