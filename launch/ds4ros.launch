@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="ds4ros" type="ds4drv_wrapper.py" name="ds4_ros" output="screen">
+		<param name="ds4drv_cfg" value="$(find ds4ros)/cfg/ds4drv_example.conf"/>
+		<remap from="joy_node/dev" to="joy_node/dev" /> <!-- Remap this to the joy_node/dev parameter of your joystick node-->
+    </node>
+</launch>
