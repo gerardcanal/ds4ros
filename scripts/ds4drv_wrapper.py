@@ -31,7 +31,7 @@ class ROSDS4Controller:
         try:
             if cfg_path:
                 sys.argv.extend(['--config', cfg_path])
-            sys.argv = [a for a in sys.argv if not a.startswith('_')]
+            sys.argv = [a for a in sys.argv if (not a.startswith('_') and ":=" not in a) ]
             self.options = load_options()
         except ValueError as err:
             Daemon.exit("Failed to parse options: {0}", err)
