@@ -6,6 +6,12 @@ Install [ds4drv](https://github.com/chrippa/ds4drv): sudo -H pip install git+htt
 
 Set up the permissions as specified (here)[https://github.com/chrippa/ds4drv#permissions].
 
+## Usage
+You can use it either as a ROS node and supply a config file, or just use it as ds4drv with rosrun.
+Example: `rosrun ds4ros ds4drv_wrapper.py --hidraw --led 00ff00`
+
+The node only supports one controller at a time.
+
 ## ROS Services
 - `ds4_ros/connect`
 std_srvs/Empty
