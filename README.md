@@ -21,6 +21,10 @@ Connects to a controller
 std_srvs/Empty
 Disconnects a controller (keeps waiting for reconnection)
 
+- `ds4_ros/is_connected`
+ds4ros/IsConnected
+Checks if a controller is connected
+
 - `ds4_ros/set_color`
 ds4ros/SetColor
 Sets the lightbar to the specified RGB color
