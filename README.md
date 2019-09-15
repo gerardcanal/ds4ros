@@ -2,7 +2,7 @@
 Wrapper for ds4drv to use with ROS.
 
 ## Installation
-Install (ds4drv)[https://github.com/chrippa/ds4drv]: sudo -H pip3 install git+https://github.com/gerardcanal/ds4drv (My fork is based on a fork that has some fixes for the led colors)
+Install [ds4drv](https://github.com/chrippa/ds4drv): sudo -H pip install git+https://github.com/gerardcanal/ds4drv (My fork is based on a fork that has some fixes for the led colors)
 
 Set up the permissions as specified (here)[https://github.com/chrippa/ds4drv#permissions].
 
