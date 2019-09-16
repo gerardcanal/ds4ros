@@ -91,19 +91,27 @@ class ROSDS4Controller:
         self.device.set_led(r, g, b)
 
     def srv_set_color(self, req):
+        if not self.is_connected():
+            return []
         self.set_color(int(req.color.r), int(req.color.g), int(req.color.b))
         return []
 
     def start_led_flash(self, req):
+        if not self.is_connected():
+            return []
         self.stop_led_flash()
         self.device.start_led_flash(req.on_time, req.off_time)
         return ()
 
     def stop_led_flash(self, _=''):
+        if not self.is_connected():
+            return []
         self.device.stop_led_flash()
-        return EmptyResponse()
+        return ()
 
     def rumble(self, req):
+        if not self.is_connected():
+            return []
         s = rospy.get_time()
         d = rospy.get_time() - s
         while d < req.duration and not rospy.is_shutdown():
@@ -114,6 +122,8 @@ class ROSDS4Controller:
         return ()
 
     def stop_rumble(self, _=None):
+        if not self.is_connected():
+            return []
         self.device.rumble(0, 0)
         return ()
 
