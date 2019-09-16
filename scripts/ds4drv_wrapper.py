@@ -55,7 +55,6 @@ class ROSDS4Controller:
 
         self.thread = None
         self.disconnect_called = True
-        self.start_ros_services()
 
     def connect(self):
         if not self.thread or not self.thread.is_alive():
@@ -165,6 +164,7 @@ def main():
                 return None
 
     controller.connect()
+    controller.start_ros_services()
 
     # Set dev parameter
     dev = controller.get_jsdev()
