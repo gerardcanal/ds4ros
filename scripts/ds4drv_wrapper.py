@@ -140,7 +140,6 @@ def main():
     rospy.loginfo('[ROSDS4Controller] Starting ds4drv with config: ' + cfg_path)
 
     controller = ROSDS4Controller(cfg_path)
-    controller.connect()
 
     if controller.options.hidraw:
         rospy.loginfo(
@@ -150,6 +149,8 @@ def main():
             if rospy.is_shutdown():
                 rospy.loginfo('[ROSDS4Controller] Shutting down node!')
                 return None
+
+    controller.connect()
 
     # Set dev parameter
     dev = controller.get_jsdev()
