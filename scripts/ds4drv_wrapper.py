@@ -32,8 +32,10 @@ class ROSDS4Controller:
         try:
             if cfg_path:
                 sys.argv.extend(['--config', cfg_path])
-            sys.argv = [a for a in sys.argv if (not a.startswith('_') and ":=" not in a) ]
+            aux = sys.argv
+            sys.argv = [a for a in sys.argv if (not a.startswith('_') and ":=" not in a)]
             self.options = load_options()
+            sys.argv = aux  # Return original argv
         except ValueError as err:
             Daemon.exit("Failed to parse options: {0}", err)
 
@@ -103,10 +105,17 @@ class ROSDS4Controller:
         return EmptyResponse()
 
     def rumble(self, req):
-        self.device.rumble(req.small, req.big)
+        s = rospy.get_time()
+        d = rospy.get_time() - s
+        while d < req.duration and not rospy.is_shutdown():
+            if d % 4 < 0.01:  # Every 4 seconds we reactivate rumble so it doesn't stop...
+                self.device.rumble(req.small, req.big)
+            d = rospy.get_time() - s
+        self.stop_rumble()
+        print('Duration: ' + str(rospy.get_time() - s))
         return ()
 
-    def stop_rumble(self, _):
+    def stop_rumble(self, _=None):
         self.device.rumble(0, 0)
         return ()
 
@@ -147,7 +156,7 @@ def main():
 
     controller = ROSDS4Controller(cfg_path)
 
-    if controller.options.hidraw:
+    if controller.options.hidraw:  # Not sure if needed!? But shouldn't harm...
         rospy.loginfo(
             '[ROSDS4Controller] Waiting for joystick to connect before attempting hidraw connection through ds4drv...')
         while not glob.glob('/dev/input/js*'):
@@ -160,7 +169,15 @@ def main():
 
     # Set dev parameter
     dev = controller.get_jsdev()
-    rospy.loginfo('[ROSDS4Controller] Setting device parameter to: ' + dev)
+
+    dev_param = 'joy_node/dev'
+    for a in sys.argv:
+        a = a.split(':=')
+        if len(a) > 1 and a[0] == dev_param:
+            dev_param = a[1]
+            break
+
+    rospy.loginfo('[ROSDS4Controller] Setting device parameter "' + dev_param + '" to: ' + dev)
     rospy.set_param('joy_node/dev', dev)
 
     # Wait forever

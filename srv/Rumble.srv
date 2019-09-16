@@ -1,4 +1,5 @@
 # Values go from 0 to 255
 uint8 small
 uint8 big
+float32 duration # in seconds
 ---
