@@ -90,7 +90,6 @@ class ROSDS4Controller:
         self.device.set_led(r, g, b)
 
     def srv_set_color(self, req):
-        print(req)
         self.set_color(int(req.color.r), int(req.color.g), int(req.color.b))
         return []
 
