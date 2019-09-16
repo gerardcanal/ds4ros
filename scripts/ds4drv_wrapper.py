@@ -112,7 +112,6 @@ class ROSDS4Controller:
                 self.device.rumble(req.small, req.big)
             d = rospy.get_time() - s
         self.stop_rumble()
-        print('Duration: ' + str(rospy.get_time() - s))
         return ()
 
     def stop_rumble(self, _=None):
