@@ -78,6 +78,8 @@ class ROSDS4Controller:
         return self.thread.controller.actions[i].joystick.joystick_dev
 
     def get_battery(self, _):
+        if not self.is_connected():
+            raise Exception('Controller is not connected!')
         i = ActionRegistry.actions.index(ds4drv.actions.status.ReportActionStatus)
         lr = self.thread.controller.actions[i]._last_report
         max_value = lr.plug_usb and ds4drv.actions.status.BATTERY_MAX_CHARGING or ds4drv.actions.status.BATTERY_MAX
