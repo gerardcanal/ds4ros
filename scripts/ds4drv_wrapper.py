@@ -51,12 +51,15 @@ class ROSDS4Controller:
             rospy.logwarn(
                 '[ROSDS4Controller] Only one controller is processed. Multiple controller options will be ignored')
 
-        self.thread = create_controller_thread(1, self.options.controllers[0])
-        self.threads.append(self.thread)
+        self.thread = None
         self.disconnect_called = True
         self.start_ros_services()
 
     def connect(self):
+        if not self.thread or not self.thread.is_alive():
+            self.thread = create_controller_thread(1, self.options.controllers[0])
+            if self.thread not in self.threads:
+                self.threads.append(self.thread)
         self.device = next(self.backend.devices)  # Gets device
         self.thread.controller.setup_device(self.device)
         self.disconnect_called = False
@@ -111,11 +114,15 @@ class ROSDS4Controller:
     def srv_connect(self, _):
         if not self.is_connected():
             self.connect()
+        else:
+            raise Exception('Controller is already connected!')
         return ()
 
     def srv_disconnect(self, _):
         if self.is_connected():
             self.disconnect()
+        else:
+            raise Exception('Controller is not connected!')
         return ()
 
     def srv_is_connected(self, _):
